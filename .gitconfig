@@ -1,5 +1,11 @@
+[apply]
+	whitespace = nowarn
+[user]
+	name = Zane Shannon
+	email = z@zcs.me
 [alias]
 	# TBC
+	co = checkout
 [core]
 	# Use custom `.gitignore`
 	excludesfile = ~/.gitignore

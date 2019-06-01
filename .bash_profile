@@ -1,3 +1,32 @@
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+export EDITOR="/usr/local/bin/code -w"
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
+
+source $(brew --prefix)/etc/bash_completion.d/git-prompt.sh
+PS1="\h:\W \u\$(__git_ps1 \" (%s) \")\$ "
+
+genpassword() { pwgen -Bs $1 1 | pbcopy | pbpaste; echo "Has been copied to clipboard"
+}
+
+genuuid() { uuidgen | pbcopy | pbpaste; echo "Has been copied to clipboard"
+}
+
+# export PATH="/usr/local/opt/gpg-agent/bin:$PATH"
+# Add the following to your shell init to set up gpg-agent automatically for every shell
+# if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
+#     source ~/.gnupg/.gpg-agent-info
+#     export GPG_AGENT_INFO
+# else
+#     eval $(gpg-agent --daemon --write-env-file ~/.gnupg/.gpg-agent-info)
+# fi
+
 ### Aliases
 
 # Open specified files in Sublime Text
@@ -32,6 +61,19 @@ alias gc='git commit -m' # requires you to type a commit message
 alias gp='git push'
 alias grm='git rm $(git ls-files --deleted)'
 
+# Docker Compose
+alias up='docker-compose up'
+dew() {
+  docker-compose run --rm app $@
+}
+drails() {
+  dew bundle exec rails $@
+}
+dyarn() {
+  dew yarn $@
+}
+
+
 ### Prompt Colors
 # Modified version of @gf3’s Sexy Bash Prompt
 # (https://github.com/gf3/dotfiles)
@@ -46,7 +88,7 @@ if tput setaf 1 &> /dev/null; then
 	if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
 		MAGENTA=$(tput setaf 9)
 		ORANGE=$(tput setaf 172)
-		GREEN=$(tput setaf 190)
+		GREEN=$(tput setaf 027)
 		PURPLE=$(tput setaf 141)
 	else
 		MAGENTA=$(tput setaf 5)
@@ -84,7 +126,7 @@ function parse_git_branch() {
 # (http://en.wikipedia.org/wiki/Unicode_symbols)
 symbol="⚡ "
 
-export PS1="\[${MAGENTA}\]\u \[$RESET\]in \[$GREEN\]\w\[$RESET\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$RESET\]\n$symbol\[$RESET\]"
+export PS1="in \[$GREEN\]\w\[$RESET\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$MAGENTA\]\$(parse_git_branch)\[$RESET\]\n$symbol\[$RESET\]"
 export PS2="\[$ORANGE\]→ \[$RESET\]"
 
 
